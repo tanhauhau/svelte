@@ -2,8 +2,9 @@ import Renderer from '../Renderer';
 import Block from '../Block';
 import Text from '../../nodes/Text';
 import Wrapper from './shared/Wrapper';
-import { x } from 'code-red';
+import { x, b } from 'code-red';
 import { Identifier } from 'estree';
+import { is_head } from '../wrappers/shared/is_head';
 
 // Whitespace inside one of these elements will not result in
 // a whitespace node being created in any circumstances. (This
@@ -69,11 +70,29 @@ export default class TextWrapper extends Wrapper {
 		if (this.skip) return;
 		const use_space = this.use_space();
 
-		block.add_element(
-			this.var,
-			use_space ? x`@space()` : x`@text("${this.data}")`,
-			parent_nodes && (use_space ? x`@claim_space(${parent_nodes})` : x`@claim_text(${parent_nodes}, "${this.data}")`),
-			parent_node as Identifier
-		);
+		if (block.renderer.options.hydratable && parent_nodes) {	
+			block.add_element(
+				this.var,
+				use_space ? x`@space()` : x`@text("${this.data}")`,
+				parent_nodes && (use_space ? x`@claim_space(${parent_nodes})` : x`@claim_text(${parent_nodes}, "${this.data}")`),
+				parent_node as Identifier
+			);
+		} else {		
+			block.chunks.mount.push(
+				b`@append_text(${parent_node || '#target'}, "${use_space ? ' ': this.data}")`
+			)
+
+			if (parent_node) {
+				if (is_head(parent_node)) {
+					block.add_variable(this.var);
+					block.chunks.mount.push(b`${this.var} = @last_child(${parent_node});`);
+					block.chunks.destroy.push(b`@detach(${this.var});`);
+				}
+			} else {
+				block.add_variable(this.var);
+				block.chunks.mount.push(b`${this.var} = @last_child(#target);`);
+				block.chunks.destroy.push(b`if (detaching) @detach(${this.var});`);
+			}
+		}
 	}
 }

@@ -4,6 +4,16 @@ export function append(target: Node, node: Node) {
 	target.appendChild(node);
 }
 
+export function append_text(target: Element, text: string) {
+	target.insertAdjacentText('beforeend', text);
+	return target;
+}
+
+export function append_html(target: Element, html: string) {
+	target.insertAdjacentHTML('beforeend', html);
+	return target;
+}
+
 export function insert(target: Node, node: Node, anchor?: Node) {
 	target.insertBefore(node, anchor || null);
 }
@@ -16,6 +26,10 @@ export function destroy_each(iterations, detaching) {
 	for (let i = 0; i < iterations.length; i += 1) {
 		if (iterations[i]) iterations[i].d(detaching);
 	}
+}
+
+export function last_child(node: Node) {
+	return node.lastChild;
 }
 
 export function element<K extends keyof HTMLElementTagNameMap>(name: K) {

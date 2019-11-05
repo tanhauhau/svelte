@@ -39,6 +39,11 @@ export default class AttributeWrapper {
 				}
 			}
 		}
+
+		if (node.is_spread) {
+			parent.cannot_use_innerhtml();
+			parent.not_static_content();
+		}
 	}
 
 	render(block: Block) {
