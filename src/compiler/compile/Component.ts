@@ -563,13 +563,12 @@ export default class Component {
 				if (scope_map.has(node)) {
 					_scope = scope_map.get(node);
 				}
-				if (is_used_as_reference(node, parent) && node.name[0] === '$' && globals.has(node.name)) {
-					if (_scope.has(node.name.slice(1))) {
-						globals.delete(node.name);
-						
+				if (node.type === 'Identifier' && node.name[0] === '$') {
+					if (is_used_as_reference(node, parent) && !_scope.has(node.name) && _scope.has(node.name.slice(1))) {
 						if (parent.type === 'AssignmentExpression' || parent.type === 'UpdateExpression') {
-							
+								this.replace(x`@set_store_value(${node.name.slice(1)}, ${node});`);
 						} else {
+							globals.delete(node.name);
 							this.replace(x`@get_store_value(${node.name.slice(1)})`);
 						}
 					}
