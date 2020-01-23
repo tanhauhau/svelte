@@ -536,7 +536,7 @@ export default class Component {
 			},
 		});
 
-		const { scope, globals } = create_scopes(script.content);
+		const { scope, globals, map: scope_map } = create_scopes(script.content);
 		this.module_scope = scope;
 
 		scope.declarations.forEach((node, name) => {
@@ -555,6 +555,26 @@ export default class Component {
 				hoistable: true,
 				writable
 			});
+		});
+
+		let _scope = this.module_scope;
+		walk(script.content, {
+			enter(node, parent) {
+				if (scope_map.has(node)) {
+					_scope = scope_map.get(node);
+				}
+				if (is_used_as_reference(node, parent) && node.name[0] === '$' && globals.has(node.name)) {
+					if (_scope.has(node.name.slice(1))) {
+						globals.delete(node.name);
+						
+						if (parent.type === 'AssignmentExpression' || parent.type === 'UpdateExpression') {
+							
+						} else {
+							this.replace(x`@get_store_value(${node.name.slice(1)})`);
+						}
+					}
+				}
+			},
 		});
 
 		globals.forEach((node, name) => {
