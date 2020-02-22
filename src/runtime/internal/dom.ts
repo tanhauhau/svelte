@@ -180,6 +180,22 @@ export function claim_text(nodes, data) {
 	return text(data);
 }
 
+export function claim_text_dev(nodes, data) {
+	for (let i = 0; i < nodes.length; i += 1) {
+		const node = nodes[i];
+		if (node.nodeType === 3) {
+			if (node.textContent !== '' + data) {
+				console.warn(`Text content did not match. Server: "${node.textContent}" Client: "${data}"`);
+			}
+			node.data = '' + data;
+			return nodes.splice(i, 1)[0];
+		}
+	}
+	
+	console.warn(`Text content did not match. Server: "" Client: "${data}"`);
+	return text(data);
+}
+
 export function claim_space(nodes) {
 	return claim_text(nodes, ' ');
 }
