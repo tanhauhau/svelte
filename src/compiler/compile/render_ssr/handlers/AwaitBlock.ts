@@ -11,10 +11,28 @@ export default function(node: AwaitBlock, renderer: Renderer, options: RenderOpt
 	renderer.render(node.then.children, options);
 	const then = renderer.pop();
 
-	renderer.add_expression(x`
-		function(__value) {
-			if (@is_promise(__value)) return ${pending};
-			return (function(${node.value}) { return ${then}; }(__value));
-		}(${node.expression.node})
-	`);
+	if (options.asyncRendering) {
+		renderer.push();
+		renderer.render(node.catch.children, options);
+		const _catch = renderer.pop();
+
+		renderer.add_expression(x`
+			await function(__value) {
+				return Promise.resolve(__value)
+					.then((${node.value}) => {
+						return ${then};
+					})
+					.catch((${node.error}) => {
+						return ${_catch};
+					});
+			}(${node.expression.node})
+		`);
+	} else {
+		renderer.add_expression(x`
+			function(__value) {
+				if (@is_promise(__value)) return ${pending};
+				return (function(${node.value}) { return ${then}; }(__value));
+			}(${node.expression.node})
+		`);
+	}
 }

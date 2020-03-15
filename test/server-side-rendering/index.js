@@ -47,7 +47,7 @@ describe("ssr", () => {
 			throw new Error("Forgot to remove `solo: true` from test");
 		}
 
-		(solo ? it.only : it)(dir, () => {
+		(solo ? it.only : it)(dir, async () => {
 			dir = path.resolve(`${__dirname}/samples`, dir);
 
 			cleanRequireCache();
@@ -69,7 +69,7 @@ describe("ssr", () => {
 
 				const props = tryToLoadJson(`${dir}/data.json`) || undefined;
 
-				const rendered = Component.render(props);
+				const rendered = await Component.render(props);
 				const { html, css, head } = rendered;
 
 				fs.writeFileSync(`${dir}/_actual.html`, html);
@@ -120,7 +120,7 @@ describe("ssr", () => {
 
 				if (show) showOutput(dir, { generate: 'ssr', format: 'cjs' });
 			} catch (err) {
-				showOutput(dir, { generate: 'ssr', format: 'cjs' });
+				showOutput(dir, { ...config.compileOptions, generate: 'ssr', format: 'cjs' });
 				err.stack += `\n\ncmd-click: ${path.relative(process.cwd(), dir)}/main.svelte`;
 				throw err;
 			}

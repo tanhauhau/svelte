@@ -161,9 +161,15 @@ export default function ssr(
 
 		${component.fully_hoisted}
 
-		const ${name} = @create_ssr_component(($$result, $$props, $$bindings, $$slots) => {
-			${blocks}
-		});
+		${component.compile_options.asyncRendering ? b`
+			const ${name} = @create_async_ssr_component(async ($$result, $$props, $$bindings, $$slots) => {
+				${blocks}
+			});
+		`: b`
+			const ${name} = @create_ssr_component(($$result, $$props, $$bindings, $$slots) => {
+				${blocks}
+			});
+		`}
 	`;
 
 	return {js, css};
