@@ -31,7 +31,7 @@
     "codecov": "codecov",
     "precodecov": "npm run coverage",
     "build": "rollup -c && npm run tsd",
-    "prepare": "npm run build",
+    "build:netlify": "NETLIFY=true rollup -c",
     "dev": "rollup -cw",
     "pretest": "npm run build",
     "posttest": "agadoo internal/index.mjs",

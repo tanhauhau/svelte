@@ -8,6 +8,7 @@ import typescript from '@rollup/plugin-typescript';
 import pkg from './package.json';
 
 const is_publish = !!process.env.PUBLISH;
+const is_netlify = !!process.env.NETLIFY;
 
 const ts_plugin = is_publish
 	? typescript({
@@ -28,12 +29,12 @@ export default [
 		input: `src/runtime/index.ts`,
 		output: [
 			{
-				file: `index.mjs`,
+				file: is_netlify ? `dist/index.mjs` : `index.mjs`,
 				format: 'esm',
 				paths: id => id.startsWith('svelte/') && `${id.replace('svelte', '.')}`
 			},
 			{
-				file: `index.js`,
+				file: is_netlify ? `dist/index.js` : `index.js`,
 				format: 'cjs',
 				paths: id => id.startsWith('svelte/') && `${id.replace('svelte', '.')}`
 			}
@@ -44,7 +45,11 @@ export default [
 
 	...fs.readdirSync('src/runtime')
 		.filter(dir => fs.statSync(`src/runtime/${dir}`).isDirectory())
-		.map(dir => ({
+		.map(dir => {
+			if (is_netlify) {
+				dir = `dist/${dir}`;
+			}
+			return ({
 			input: `src/runtime/${dir}/index.ts`,
 			output: [
 				{
@@ -83,7 +88,8 @@ export default [
 					}
 				}
 			]
-		})),
+		});
+	}),
 
 	/* compiler.js */
 	{
@@ -100,7 +106,7 @@ export default [
 			ts_plugin
 		],
 		output: {
-			file: 'compiler.js',
+			file: is_netlify ? 'dist/compiler.js' : 'compiler.js',
 			format: is_publish ? 'umd' : 'cjs',
 			name: 'svelte',
 			sourcemap: true,
