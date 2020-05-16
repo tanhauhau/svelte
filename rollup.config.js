@@ -46,19 +46,17 @@ export default [
 	...fs.readdirSync('src/runtime')
 		.filter(dir => fs.statSync(`src/runtime/${dir}`).isDirectory())
 		.map(dir => {
-			if (is_netlify) {
-				dir = `dist/${dir}`;
-			}
+			const output_dir = is_netlify ? `dist/${dir}` : dir;
 			return ({
 			input: `src/runtime/${dir}/index.ts`,
 			output: [
 				{
-					file: `${dir}/index.mjs`,
+					file: `${output_dir}/index.mjs`,
 					format: 'esm',
 					paths: id => id.startsWith('svelte/') && `${id.replace('svelte', '..')}`
 				},
 				{
-					file: `${dir}/index.js`,
+					file: `${output_dir}/index.js`,
 					format: 'cjs',
 					paths: id => id.startsWith('svelte/') && `${id.replace('svelte', '..')}`
 				}
@@ -78,13 +76,13 @@ export default [
 							}
 						}
 
-						fs.writeFileSync(`${dir}/package.json`, JSON.stringify({
+						fs.writeFileSync(`${output_dir}/package.json`, JSON.stringify({
 							main: './index',
 							module: './index.mjs',
 							types: './index.d.ts'
 						}, null, '  '));
 
-						fs.writeFileSync(`${dir}/index.d.ts`, `export * from '../types/runtime/${dir}/index';`);
+						fs.writeFileSync(`${output_dir}/index.d.ts`, `export * from '../types/runtime/${dir}/index';`);
 					}
 				}
 			]
