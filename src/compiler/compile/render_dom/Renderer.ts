@@ -156,7 +156,12 @@ export default class Renderer {
 		const member = this.context_lookup.get(name);
 
 		if (variable && (variable.subscribable && (variable.reassigned || variable.export_name))) {
-			return x`${`$$subscribe_${name}`}($$invalidate(${member.index}, ${value || name}))`;
+			const store_variable = this.component.var_lookup.get(`$${name}`);
+			let invalidate = x`$$invalidate(${member.index}, ${value || name})`;
+			if (store_variable.referenced || store_variable.referenced_from_script) {
+				invalidate = x`${`$$subscribe_${name}`}(${invalidate})`;
+			}
+			return invalidate;
 		}
 
 		if (name[0] === '$' && name[1] !== '$') {

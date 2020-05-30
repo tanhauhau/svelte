@@ -2,32 +2,58 @@
 import {
 	SvelteComponent,
 	component_subscribe,
+	detach,
 	init,
+	insert,
+	noop,
 	safe_not_equal,
-	set_store_value
+	set_data,
+	set_store_value,
+	text
 } from "svelte/internal";
 
 import { count } from "./store.js";
 
+function create_fragment(ctx) {
+	let t;
+
+	return {
+		c() {
+			t = text(/*$count*/ ctx[0]);
+		},
+		m(target, anchor) {
+			insert(target, t, anchor);
+		},
+		p(ctx, [dirty]) {
+			if (dirty & /*$count*/ 1) set_data(t, /*$count*/ ctx[0]);
+		},
+		i: noop,
+		o: noop,
+		d(detaching) {
+			if (detaching) detach(t);
+		}
+	};
+}
+
 function instance($$self, $$props, $$invalidate) {
 	let $count;
-	component_subscribe($$self, count, $$value => $$invalidate(1, $count = $$value));
+	component_subscribe($$self, count, $$value => $$invalidate(0, $count = $$value));
 
 	function increment() {
 		set_store_value(count, $count++, $count);
 	}
 
-	return [increment];
+	return [$count, increment];
 }
 
 class Component extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, null, safe_not_equal, { increment: 0 });
+		init(this, options, instance, create_fragment, safe_not_equal, { increment: 1 });
 	}
 
 	get increment() {
-		return this.$$.ctx[0];
+		return this.$$.ctx[1];
 	}
 }
 

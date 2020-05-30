@@ -821,9 +821,11 @@ export default class Component {
 
 				if (is_used_as_reference(node, parent)) {
 					const object = get_object(node);
-					if (scope.find_owner(object.name) === instance_scope) {
+					if (scope.find_owner(object.name) === instance_scope || object.name[0] === '$') {
 						const variable = component.var_lookup.get(object.name);
-						variable.referenced_from_script = true;
+						if (variable) {
+							variable.referenced_from_script = true;
+						}
 					}
 				}
 			},

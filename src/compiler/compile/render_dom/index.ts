@@ -248,6 +248,11 @@ export default function dom(
 		component.rewrite_props(({ name, reassigned, export_name }) => {
 			const value = `$${name}`;
 			const i = renderer.context_lookup.get(`$${name}`).index;
+			const variable = component.var_lookup.get(`$${name}`);
+
+			if (!(variable.referenced || variable.referenced_from_script)) {
+				return null;
+			}
 
 			const insert = (reassigned || export_name)
 				? b`${`$$subscribe_${name}`}()`
@@ -329,6 +334,7 @@ export default function dom(
 		: { type: 'Literal', value: null };
 
 	const reactive_store_subscriptions = reactive_stores
+		.filter(store => store.referenced || store.referenced_from_script)
 		.filter(store => {
 			const variable = component.var_lookup.get(store.name.slice(1));
 			return !variable || variable.hoistable;
@@ -339,6 +345,7 @@ export default function dom(
 		`);
 
 	const resubscribable_reactive_store_unsubscribers = reactive_stores
+		.filter(store => store.referenced || store.referenced_from_script)
 		.filter(store => {
 			const variable = component.var_lookup.get(store.name.slice(1));
 			return variable && (variable.reassigned || variable.export_name);
@@ -381,7 +388,7 @@ export default function dom(
 			const name = $name.slice(1);
 
 			const store = component.var_lookup.get(name);
-			if (store && (store.reassigned || store.export_name)) {
+			if (store && (variable.referenced || variable.referenced_from_script) && (store.reassigned || store.export_name)) {
 				const unsubscribe = `$$unsubscribe_${name}`;
 				const subscribe = `$$subscribe_${name}`;
 				const i = renderer.context_lookup.get($name).index;

@@ -5,5 +5,3 @@
 		$count++;
 	}
 </script>
-
-{$count}

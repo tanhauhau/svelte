@@ -20,7 +20,7 @@ export default {
 				mutated: true,
 				reassigned: false,
 				referenced: false,
-				referenced_from_script: false,
+				referenced_from_script: true,
 				writable: true
 			}
 		]);
