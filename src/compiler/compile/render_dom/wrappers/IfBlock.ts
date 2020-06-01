@@ -81,8 +81,6 @@ export default class IfBlockWrapper extends Wrapper {
 	branches: IfBlockBranch[];
 	needs_update = false;
 
-	var: Identifier = { type: 'Identifier', name: 'if_block' };
-
 	constructor(
 		renderer: Renderer,
 		block: Block,
@@ -92,6 +90,8 @@ export default class IfBlockWrapper extends Wrapper {
 		next_sibling: Wrapper
 	) {
 		super(renderer, block, parent, node);
+
+		this.var = block.get_unique_name('if_block');
 
 		this.cannot_use_innerhtml();
 		this.not_static_content();

@@ -65,8 +65,6 @@ export default class EachBlockWrapper extends Wrapper {
 	updates: Array<Node | Node[]> = [];
 	dependencies: Set<string>;
 
-	var: Identifier = { type: 'Identifier', name: 'each' };
-
 	constructor(
 		renderer: Renderer,
 		block: Block,
@@ -76,6 +74,9 @@ export default class EachBlockWrapper extends Wrapper {
 		next_sibling: Wrapper
 	) {
 		super(renderer, block, parent, node);
+
+		this.var = block.get_unique_name('each');
+
 		this.cannot_use_innerhtml();
 		this.not_static_content();
 

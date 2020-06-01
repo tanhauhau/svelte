@@ -151,10 +151,8 @@ export default class ElementWrapper extends Wrapper {
 		next_sibling: Wrapper
 	) {
 		super(renderer, block, parent, node);
-		this.var = {
-			type: 'Identifier',
-			name: node.name.replace(/[^a-zA-Z0-9_$]/g, '_')
-		};
+		this.var = block.get_unique_name(node.name.replace(/[^a-zA-Z0-9_$]/g, '_'));
+		console.log(this.var);
 
 		this.void = is_void(node.name);
 

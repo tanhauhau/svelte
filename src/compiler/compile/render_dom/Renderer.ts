@@ -89,15 +89,6 @@ export default class Renderer {
 			null
 		);
 
-		// TODO messy
-		this.blocks.forEach(block => {
-			if (block instanceof Block) {
-				block.assign_variable_names();
-			}
-		});
-
-		this.block.assign_variable_names();
-
 		this.fragment.render(this.block, null, x`#nodes` as Identifier);
 
 		this.context_overflow = this.context.length > 31;

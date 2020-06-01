@@ -103,135 +103,135 @@ function create_if_block(ctx) {
 
 function create_fragment(ctx) {
 	let div;
-	let t0;
-	let p0;
-	let t2;
-	let t3;
-	let t4;
-	let p1;
-	let t6;
-	let t7;
-	let if_block4_anchor;
-	let if_block0 = /*a*/ ctx[0] && create_if_block_4(ctx);
-	let if_block1 = /*b*/ ctx[1] && create_if_block_3(ctx);
-	let if_block2 = /*c*/ ctx[2] && create_if_block_2(ctx);
-	let if_block3 = /*d*/ ctx[3] && create_if_block_1(ctx);
-	let if_block4 = /*e*/ ctx[4] && create_if_block(ctx);
+	let t_7;
+	let p_1;
+	let t_5;
+	let t_4;
+	let t_3;
+	let p;
+	let t_1;
+	let t;
+	let if_block_anchor;
+	let if_block_4 = /*a*/ ctx[0] && create_if_block_4(ctx);
+	let if_block_3 = /*b*/ ctx[1] && create_if_block_3(ctx);
+	let if_block_2 = /*c*/ ctx[2] && create_if_block_2(ctx);
+	let if_block_1 = /*d*/ ctx[3] && create_if_block_1(ctx);
+	let if_block = /*e*/ ctx[4] && create_if_block(ctx);
 
 	return {
 		c() {
 			div = element("div");
-			if (if_block0) if_block0.c();
-			t0 = space();
-			p0 = element("p");
-			p0.textContent = "this can be used as an anchor";
-			t2 = space();
-			if (if_block1) if_block1.c();
-			t3 = space();
-			if (if_block2) if_block2.c();
-			t4 = space();
-			p1 = element("p");
-			p1.textContent = "so can this";
-			t6 = space();
-			if (if_block3) if_block3.c();
-			t7 = space();
-			if (if_block4) if_block4.c();
-			if_block4_anchor = empty();
+			if (if_block_4) if_block_4.c();
+			t_7 = space();
+			p_1 = element("p");
+			p_1.textContent = "this can be used as an anchor";
+			t_5 = space();
+			if (if_block_3) if_block_3.c();
+			t_4 = space();
+			if (if_block_2) if_block_2.c();
+			t_3 = space();
+			p = element("p");
+			p.textContent = "so can this";
+			t_1 = space();
+			if (if_block_1) if_block_1.c();
+			t = space();
+			if (if_block) if_block.c();
+			if_block_anchor = empty();
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
-			if (if_block0) if_block0.m(div, null);
-			append(div, t0);
-			append(div, p0);
-			append(div, t2);
-			if (if_block1) if_block1.m(div, null);
-			append(div, t3);
-			if (if_block2) if_block2.m(div, null);
-			append(div, t4);
-			append(div, p1);
-			append(div, t6);
-			if (if_block3) if_block3.m(div, null);
-			insert(target, t7, anchor);
-			if (if_block4) if_block4.m(target, anchor);
-			insert(target, if_block4_anchor, anchor);
+			if (if_block_4) if_block_4.m(div, null);
+			append(div, t_7);
+			append(div, p_1);
+			append(div, t_5);
+			if (if_block_3) if_block_3.m(div, null);
+			append(div, t_4);
+			if (if_block_2) if_block_2.m(div, null);
+			append(div, t_3);
+			append(div, p);
+			append(div, t_1);
+			if (if_block_1) if_block_1.m(div, null);
+			insert(target, t, anchor);
+			if (if_block) if_block.m(target, anchor);
+			insert(target, if_block_anchor, anchor);
 		},
 		p(ctx, [dirty]) {
 			if (/*a*/ ctx[0]) {
-				if (if_block0) {
+				if (if_block_4) {
 					
 				} else {
-					if_block0 = create_if_block_4(ctx);
-					if_block0.c();
-					if_block0.m(div, t0);
+					if_block_4 = create_if_block_4(ctx);
+					if_block_4.c();
+					if_block_4.m(div, t_7);
 				}
-			} else if (if_block0) {
-				if_block0.d(1);
-				if_block0 = null;
+			} else if (if_block_4) {
+				if_block_4.d(1);
+				if_block_4 = null;
 			}
 
 			if (/*b*/ ctx[1]) {
-				if (if_block1) {
+				if (if_block_3) {
 					
 				} else {
-					if_block1 = create_if_block_3(ctx);
-					if_block1.c();
-					if_block1.m(div, t3);
+					if_block_3 = create_if_block_3(ctx);
+					if_block_3.c();
+					if_block_3.m(div, t_4);
 				}
-			} else if (if_block1) {
-				if_block1.d(1);
-				if_block1 = null;
+			} else if (if_block_3) {
+				if_block_3.d(1);
+				if_block_3 = null;
 			}
 
 			if (/*c*/ ctx[2]) {
-				if (if_block2) {
+				if (if_block_2) {
 					
 				} else {
-					if_block2 = create_if_block_2(ctx);
-					if_block2.c();
-					if_block2.m(div, t4);
+					if_block_2 = create_if_block_2(ctx);
+					if_block_2.c();
+					if_block_2.m(div, t_3);
 				}
-			} else if (if_block2) {
-				if_block2.d(1);
-				if_block2 = null;
+			} else if (if_block_2) {
+				if_block_2.d(1);
+				if_block_2 = null;
 			}
 
 			if (/*d*/ ctx[3]) {
-				if (if_block3) {
+				if (if_block_1) {
 					
 				} else {
-					if_block3 = create_if_block_1(ctx);
-					if_block3.c();
-					if_block3.m(div, null);
+					if_block_1 = create_if_block_1(ctx);
+					if_block_1.c();
+					if_block_1.m(div, null);
 				}
-			} else if (if_block3) {
-				if_block3.d(1);
-				if_block3 = null;
+			} else if (if_block_1) {
+				if_block_1.d(1);
+				if_block_1 = null;
 			}
 
 			if (/*e*/ ctx[4]) {
-				if (if_block4) {
+				if (if_block) {
 					
 				} else {
-					if_block4 = create_if_block(ctx);
-					if_block4.c();
-					if_block4.m(if_block4_anchor.parentNode, if_block4_anchor);
+					if_block = create_if_block(ctx);
+					if_block.c();
+					if_block.m(if_block_anchor.parentNode, if_block_anchor);
 				}
-			} else if (if_block4) {
-				if_block4.d(1);
-				if_block4 = null;
+			} else if (if_block) {
+				if_block.d(1);
+				if_block = null;
 			}
 		},
 		i: noop,
 		o: noop,
 		d(detaching) {
 			if (detaching) detach(div);
-			if (if_block0) if_block0.d();
-			if (if_block1) if_block1.d();
-			if (if_block2) if_block2.d();
-			if (if_block3) if_block3.d();
-			if (detaching) detach(t7);
-			if (if_block4) if_block4.d(detaching);
-			if (detaching) detach(if_block4_anchor);
+			if (if_block_4) if_block_4.d();
+			if (if_block_3) if_block_3.d();
+			if (if_block_2) if_block_2.d();
+			if (if_block_1) if_block_1.d();
+			if (detaching) detach(t);
+			if (if_block) if_block.d(detaching);
+			if (detaching) detach(if_block_anchor);
 		}
 	};
 }

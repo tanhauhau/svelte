@@ -9,7 +9,6 @@ export default class TextWrapper extends Wrapper {
 	node: Text;
 	data: string;
 	skip: boolean;
-	var: Identifier;
 
 	constructor(
 		renderer: Renderer,
@@ -22,7 +21,7 @@ export default class TextWrapper extends Wrapper {
 
 		this.skip = this.node.should_skip();
 		this.data = data;
-		this.var = (this.skip ? null : x`t`) as unknown as Identifier;
+		this.var = (this.skip ? null : block.get_unique_name('t')) as unknown as Identifier;
 	}
 
 	use_space() {

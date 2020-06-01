@@ -8,10 +8,10 @@ import { x } from 'code-red';
 import { Identifier } from 'estree';
 
 export default class MustacheTagWrapper extends Tag {
-	var: Identifier = { type: 'Identifier', name: 't' };
 
 	constructor(renderer: Renderer, block: Block, parent: Wrapper, node: MustacheTag | RawMustacheTag) {
 		super(renderer, block, parent, node);
+		this.var = block.get_unique_name('t');
 	}
 
 	render(block: Block, parent_node: Identifier, parent_nodes: Identifier) {

@@ -17,7 +17,6 @@ export default class SlotWrapper extends Wrapper {
 	fragment: FragmentWrapper;
 	fallback: Block | null = null;
 
-	var: Identifier = { type: 'Identifier', name: 'slot' };
 	dependencies: Set<string> = new Set(['$$scope']);
 
 	constructor(
@@ -29,6 +28,9 @@ export default class SlotWrapper extends Wrapper {
 		next_sibling: Wrapper
 	) {
 		super(renderer, block, parent, node);
+
+		this.var = block.get_unique_name('slot');
+
 		this.cannot_use_innerhtml();
 		this.not_static_content();
 

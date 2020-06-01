@@ -19,7 +19,6 @@ import EventHandler from '../Element/EventHandler';
 import { extract_names } from 'periscopic';
 
 export default class InlineComponentWrapper extends Wrapper {
-	var: Identifier;
 	slots: Map<string, { block: Block; scope: TemplateScope; get_context?: Node; get_changes?: Node }> = new Map();
 	node: InlineComponent;
 	fragment: FragmentWrapper;
@@ -64,14 +63,14 @@ export default class InlineComponentWrapper extends Wrapper {
 			}
 		});
 
-		this.var = {
-			type: 'Identifier',
-			name: (
-				this.node.name === 'svelte:self' ? renderer.component.name.name :
-					this.node.name === 'svelte:component' ? 'switch_instance' :
-						sanitize(this.node.name)
+		this.var = block.get_unique_name(
+			(this.node.name === "svelte:self"
+				? renderer.component.name.name
+				: this.node.name === "svelte:component"
+				? "switch_instance"
+				: sanitize(this.node.name)
 			).toLowerCase()
-		};
+		);
 
 		if (this.node.children.length) {
 			this.node.lets.forEach(l => {

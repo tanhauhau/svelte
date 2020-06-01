@@ -9,8 +9,6 @@ import { is_head } from './shared/is_head';
 import { Identifier } from 'estree';
 
 export default class RawMustacheTagWrapper extends Tag {
-	var: Identifier = { type: 'Identifier', name: 'raw' };
-
 	constructor(
 		renderer: Renderer,
 		block: Block,
@@ -18,6 +16,7 @@ export default class RawMustacheTagWrapper extends Tag {
 		node: MustacheTag | RawMustacheTag
 	) {
 		super(renderer, block, parent, node);
+		this.var = block.get_unique_name('raw');
 		this.cannot_use_innerhtml();
 		this.not_static_content();
 	}

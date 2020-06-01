@@ -108,8 +108,6 @@ export default class AwaitBlockWrapper extends Wrapper {
 	then: AwaitBlockBranch;
 	catch: AwaitBlockBranch;
 
-	var: Identifier = { type: 'Identifier', name: 'await_block' };
-
 	constructor(
 		renderer: Renderer,
 		block: Block,
@@ -119,6 +117,8 @@ export default class AwaitBlockWrapper extends Wrapper {
 		next_sibling: Wrapper
 	) {
 		super(renderer, block, parent, node);
+		
+		this.var = block.get_unique_name('await_block');
 
 		this.cannot_use_innerhtml();
 		this.not_static_content();
