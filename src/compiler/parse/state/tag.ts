@@ -407,10 +407,13 @@ function read_attribute(parser: Parser, unique_names: Set<string>) {
 
 		if (value[0]) {
 			if ((value as any[]).length > 1 || value[0].type === 'Text') {
-				parser.error({
-					code: 'invalid-directive-value',
-					message: 'Directive value must be a JavaScript expression enclosed in curly braces'
-				}, value[0].start);
+				// @FIXME: Is this okay? -@paul
+				if (type !== 'Style') {
+					parser.error({
+						code: 'invalid-directive-value',
+						message: 'Directive value must be a JavaScript expression enclosed in curly braces'
+					}, value[0].start);
+				}
 			}
 		}
 
@@ -429,7 +432,7 @@ function read_attribute(parser: Parser, unique_names: Set<string>) {
 			directive.outro = direction === 'out' || direction === 'transition';
 		}
 
-		if (!directive.expression && (type === 'Binding' || type === 'Class')) {
+		if (!directive.expression && (type === 'Binding' || type === 'Class' || type === 'Style')) {
 			directive.expression = {
 				start: directive.start + colon_index + 1,
 				end: directive.end,
@@ -457,6 +460,7 @@ function get_directive_type(name: string): DirectiveType {
 	if (name === 'animate') return 'Animation';
 	if (name === 'bind') return 'Binding';
 	if (name === 'class') return 'Class';
+	if (name === 'style') return 'Style';
 	if (name === 'on') return 'EventHandler';
 	if (name === 'let') return 'Let';
 	if (name === 'ref') return 'Ref';
