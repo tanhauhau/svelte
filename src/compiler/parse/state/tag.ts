@@ -405,22 +405,22 @@ function read_attribute(parser: Parser, unique_names: Set<string>) {
 			}, start);
 		}
 
-		const firstValue = value[0];
+		const first_value = value[0];
 		let expression = null;
 		let text = null;
 
-		if (firstValue) {
-			if ((value as any[]).length > 1 || firstValue.type === 'Text') {
+		if (first_value) {
+			if ((value as any[]).length > 1 || first_value.type === 'Text') {
 				if (type === 'Style') {
-					text = firstValue.data;
+					text = first_value.data;
 				} else {
 					parser.error({
 						code: 'invalid-directive-value',
 						message: 'Directive value must be a JavaScript expression enclosed in curly braces'
-					}, firstValue.start);
+					}, first_value.start);
 				}
 			} else {
-				expression = firstValue.expression || null;
+				expression = first_value.expression || null;
 			}
 		}
 
