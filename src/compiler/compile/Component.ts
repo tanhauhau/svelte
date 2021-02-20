@@ -197,6 +197,7 @@ export default class Component {
 				referenced: true
 			});
 		} else if (name[0] === '$') {
+			console.trace('add_var', name);
 			this.add_var({
 				name,
 				injected: true,

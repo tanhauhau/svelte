@@ -430,6 +430,7 @@ export default class Block {
 	}
 
 	render() {
+		console.log('this.dependencies', this.dependencies);
 		const key = this.key && this.get_unique_name('key');
 
 		const args: any[] = [x`#ctx`];

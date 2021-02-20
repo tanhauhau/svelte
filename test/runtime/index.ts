@@ -7,7 +7,7 @@ import { clear_loops, flush, set_now, set_raf } from '../../internal';
 
 import {
 	assert,
-	showOutput,
+	// showOutput,
 	loadConfig,
 	loadSvelte,
 	cleanRequireCache,
@@ -142,7 +142,7 @@ describe('runtime', () => {
 						mod = require(`./samples/${dir}/main.svelte`);
 						SvelteComponent = mod.default;
 					} catch (err) {
-						showOutput(cwd, compileOptions, compile); // eslint-disable-line no-console
+						// showOutput(cwd, compileOptions, compile); // eslint-disable-line no-console
 						throw err;
 					}
 
@@ -223,7 +223,7 @@ describe('runtime', () => {
 					}
 				}).catch(err => {
 					failed.add(dir);
-					showOutput(cwd, compileOptions, compile); // eslint-disable-line no-console
+					// showOutput(cwd, compileOptions, compile); // eslint-disable-line no-console
 					throw err;
 				})
 				.catch(err => {
@@ -233,7 +233,7 @@ describe('runtime', () => {
 				})
 				.then(() => {
 					if (config.show) {
-						showOutput(cwd, compileOptions, compile);
+						// showOutput(cwd, compileOptions, compile);
 					}
 
 					flush();

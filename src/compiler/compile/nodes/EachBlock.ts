@@ -25,6 +25,8 @@ export default class EachBlock extends AbstractBlock {
 	has_binding = false;
 	has_index_binding = false;
 
+	store_subscriptions: Set<string> = new Set();
+
 	else?: ElseBlock;
 
 	constructor(component: Component, parent: Node, scope: TemplateScope, info: TemplateNode) {

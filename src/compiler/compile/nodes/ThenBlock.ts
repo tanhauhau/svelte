@@ -9,6 +9,8 @@ export default class ThenBlock extends AbstractBlock {
 	type: 'ThenBlock';
 	scope: TemplateScope;
 
+	store_subscriptions: Set<string> = new Set();
+
 	constructor(component: Component, parent: AwaitBlock, scope: TemplateScope, info: TemplateNode) {
 		super(component, parent, scope, info);
 

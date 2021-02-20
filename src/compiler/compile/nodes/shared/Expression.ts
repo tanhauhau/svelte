@@ -75,20 +75,27 @@ export default class Expression {
 				}
 
 				if (is_reference(node, parent)) {
-					const { name, nodes } = flatten_reference(node);
+					let { name, nodes } = flatten_reference(node);
 					references.add(name);
 
 					if (scope.has(name)) return;
 
 					if (name[0] === '$') {
 						const store_name = name.slice(1);
-						if (template_scope.names.has(store_name) || scope.has(store_name)) {
+						if (scope.has(store_name)) {
 							component.error(node, {
 								code: 'contextual-store',
 								message: 'Stores must be declared at the top level of the component (this may change in a future version of Svelte)'
 							});
 						}
+						if (template_scope.names.has(store_name)) {
+							const node_with_scope = template_scope.get_owner(store_name);
+							node_with_scope.store_subscriptions.add(store_name);
+						}
 					}
+
+					const is_store = name[0] === '$' && name[1] !== '$';
+					name = is_store ? name.slice(1) : name;
 
 					if (template_scope.is_let(name)) {
 						if (!function_expression) { // TODO should this be `!lazy` ?
@@ -105,6 +112,9 @@ export default class Expression {
 
 						if (!lazy || is_index) {
 							template_scope.dependencies_for_name.get(name).forEach(name => dependencies.add(name));
+							if (is_store) {
+								dependencies.add('$' + name);
+							}
 						}
 					} else {
 						if (!lazy) {
@@ -204,7 +214,7 @@ export default class Expression {
 				}
 
 				if (node.type === 'Identifier' && is_reference(node, parent)) {
-					const { name } = flatten_reference(node);
+					let { name } = flatten_reference(node);
 
 					if (scope.has(name)) return;
 
@@ -219,10 +229,17 @@ export default class Expression {
 							dependencies.add(name);
 							component.add_reference(name); // TODO is this redundant/misplaced?
 						}
-					} else if (is_contextual(component, template_scope, name)) {
-						const reference = block.renderer.reference(node);
-						this.replace(reference);
+					} else {
+						const is_store = name[0] === '$' && name[1] !== '$';
+						name = is_store ? name.slice(1) : name;
+
+						if (is_contextual(component, template_scope, name)) {
+							console.log('is_contextual', node.name);
+							const reference = block.renderer.reference(node);
+							this.replace(reference);
+						}
 					}
+					console.log('nope', name);
 
 					this.skip();
 				}

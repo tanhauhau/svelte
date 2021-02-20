@@ -130,6 +130,8 @@ export default class Element extends Node {
 	namespace: string;
 	needs_manual_style_scoping: boolean;
 
+	store_subscriptions: Set<string> = new Set();
+
 	constructor(component: Component, parent: Node, scope: TemplateScope, info: any) {
 		super(component, parent, scope, info);
 		this.name = info.name;

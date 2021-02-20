@@ -127,6 +127,9 @@ export default class EachBlockWrapper extends Wrapper {
 
 		renderer.add_to_context(each_block_value.name, true);
 		renderer.add_to_context(this.index_name.name, true);
+		if (this.node.store_subscriptions.size) {
+			this.renderer.add_to_context('$$invalidate');
+		}
 
 		this.vars = {
 			create_each_block: this.block.name,
@@ -339,6 +342,16 @@ export default class EachBlockWrapper extends Wrapper {
 					${this.updates}
 				}
 			`);
+		}
+
+		for (const store of this.node.store_subscriptions) {
+			const index = this.renderer.context_lookup.get(store).index;
+			const unsubscribe = this.block.get_unique_name(`unsubscribe_${store}`);
+			// const update = this.block.get_unique_name(`update_${store}`);
+			this.block.add_variable({ type: 'Identifier', name: `$${store}` });
+			this.block.add_variable(unsubscribe, x`@subscribe(${this.renderer.reference(store)}, (#value) => ${this.renderer.reference('$$invalidate')}(${index}, ${'$' + store} = #value, ${this.renderer.reference(store)}))`);
+			// this.block.add_variable(update, x`() => (${unsubscribe}(), ${unsubscribe} = @subscribe(${this.renderer.reference(store)}, (#value) => ${this.renderer.reference('$$invalidate')}(${index}, #ctx[${index}] = #value)))`);
+			this.block.chunks.destroy.push(b`${unsubscribe}()`);
 		}
 
 		this.fragment.render(this.block, null, x`#nodes` as Identifier);

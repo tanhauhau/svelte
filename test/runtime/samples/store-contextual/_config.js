@@ -7,12 +7,12 @@ const todos = [
 ];
 
 export default {
-	error: 'Stores must be declared at the top level of the component (this may change in a future version of Svelte)',
-
 	props: {
 		todos
 	},
-
+solo:true,
+skip_if_ssr:true,
+skip_if_hydrate:true,
 	html: `
 		<label>
 			<input type=checkbox>
@@ -31,6 +31,7 @@ export default {
 	`,
 
 	async test({ assert, component, target, window }) {
+		console.log('??????')
 		const inputs = target.querySelectorAll('input');
 		const change = new window.MouseEvent('change');
 

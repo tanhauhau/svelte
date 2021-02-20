@@ -164,6 +164,7 @@ export interface Var {
 	subscribable?: boolean;
 	is_reactive_dependency?: boolean;
 	imported?: boolean;
+	contextual?: boolean;
 }
 
 export interface CssResult { 

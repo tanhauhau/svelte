@@ -28,6 +28,7 @@ export default class Tag extends Wrapper {
 		block: Block,
 		update: ((value: Node) => (Node | Node[]))
 	) {
+		console.log('rename this method');
 		const dependencies = this.node.expression.dynamic_dependencies();
 		let snippet = this.node.expression.manipulate(block);
 
