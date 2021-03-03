@@ -7,6 +7,7 @@ export * from './keyed_each';
 export * from './lifecycle';
 export * from './loop';
 export * from './scheduler';
+export * from './slot';
 export * from './spread';
 export * from './ssr';
 export * from './transitions';

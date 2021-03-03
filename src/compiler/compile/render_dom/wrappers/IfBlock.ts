@@ -609,4 +609,10 @@ export default class IfBlockWrapper extends Wrapper {
 			argument: val.argument
 		};
 	}
+
+	get_is_empty() {
+		const has_else = !(this.branches[this.branches.length - 1].condition);
+
+		return has_else ? x`false` : x`!${this.branches[0].condition}`;
+	}
 }

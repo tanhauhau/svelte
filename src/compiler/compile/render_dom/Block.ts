@@ -73,6 +73,8 @@ export default class Block {
 	has_update_method = false;
 	autofocus: string;
 
+	empty_condition: Node = null;
+
 	constructor(options: BlockOptions) {
 		this.parent = options.parent;
 		this.renderer = options.renderer;
@@ -350,6 +352,12 @@ export default class Block {
 			}
 		}
 
+		if (this.empty_condition) {
+			properties.empty = x`function #empty() {
+				return ${this.empty_condition};
+			}`;
+		}
+
 		if (this.chunks.destroy.length === 0) {
 			properties.destroy = noop;
 		} else {
@@ -379,6 +387,7 @@ export default class Block {
 			a: ${properties.animate},
 			i: ${properties.intro},
 			o: ${properties.outro},
+			e: ${properties.empty},
 			d: ${properties.destroy}
 		}`;
 

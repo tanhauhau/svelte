@@ -76,5 +76,24 @@ export default class SlotTemplateWrapper extends Wrapper {
 
 	render() {
 		this.fragment.render(this.block, null, x`#nodes` as Identifier);
+
+		let condition;
+		for (let i = 0; i < this.fragment.nodes.length; i += 1) {
+			const wrapper = this.fragment.nodes[i];
+			if (typeof wrapper.get_is_empty !== 'function') {
+				condition = null;
+				break;
+			}
+			const is_empty = wrapper.get_is_empty();
+			if (condition) {
+				condition = x`${condition} && ${is_empty}`;
+			} else {
+				condition = is_empty;
+			}
+		}
+
+		if (condition) {
+			this.block.empty_condition = condition;
+		}
 	}
 }

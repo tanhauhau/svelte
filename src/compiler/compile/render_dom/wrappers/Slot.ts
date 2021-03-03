@@ -131,7 +131,7 @@ export default class SlotWrapper extends Wrapper {
 		block.chunks.init.push(b`
 			const ${slot_definition} = ${renderer.reference('#slots')}.${slot_name};
 			const ${slot} = @create_slot(${slot_definition}, #ctx, ${renderer.reference('$$scope')}, ${get_slot_context_fn});
-			${has_fallback ? b`const ${slot_or_fallback} = ${slot} || ${this.fallback.name}(#ctx);` : null}
+			${has_fallback ? b`const ${slot_or_fallback} = @has_slot(${slot}) ? ${slot} : ${this.fallback.name}(#ctx);` : null}
 		`);
 
 		block.chunks.create.push(
@@ -181,7 +181,7 @@ export default class SlotWrapper extends Wrapper {
 
 		if (fallback_update) {
 			block.chunks.update.push(b`
-				if (${slot}) {
+				if (@has_slot(${slot})) {
 					${slot_update}
 				} else {
 					${fallback_update}
@@ -189,7 +189,7 @@ export default class SlotWrapper extends Wrapper {
 			`);
 		} else {
 			block.chunks.update.push(b`
-				if (${slot}) {
+				if (@has_slot(${slot})) {
 					${slot_update}
 				}
 			`);
@@ -208,3 +208,37 @@ export default class SlotWrapper extends Wrapper {
 		return is_dynamic(variable);
 	}
 }
+
+// NOTE:
+// let bar_slot$ = create_slot$(bar_slot_template$, ctx, /*$$scope*/ ctx[0], get_bar_slot_context$);
+// let has_bar_slot = has_slot(bar_slot$);
+// let bar_slot_or_fallback$ = has_bar_slot ? bar_slot$ : fallback_block$(ctx);
+
+// return {
+// 	p(ctx, [dirty]) {
+// 		if (has_bar_slot !== (has_bar_slot = has_slot$(bar_slot$))) {
+// 			bar_slot_or_fallback$.d();
+// 			bar_slot_or_fallback$ = has_bar_slot ? (bar_slot = create_slot$(bar_slot_template$, ctx, /*$$scope*/ ctx[0], get_bar_slot_context$)) : fallback_block$(ctx);
+// 			bar_slot_or_fallback$.c();
+// 			bar_slot_or_fallback$.m(target, anchor);
+// 		} else if (has_bar_slot) {
+// 			if (bar_slot_or_fallback$.p && dirty & /*$$scope*/ 1) {
+// 				update_slot$(bar_slot_or_fallback$, bar_slot_template$, ctx, /*$$scope*/ ctx[0], dirty, get_bar_slot_changes$, get_bar_slot_context$);
+// 			}
+// 		} else if (dirty & 1) {
+// 			bar_slot_or_fallback$.p(ctx, dirty);
+// 		}
+// 	},
+
+// NOTE: without fallback
+// let bar_slot$ = create_slot$(bar_slot_template$, ctx, /*$$scope*/ ctx[0], get_bar_slot_context$);
+
+// return {
+// 	p(ctx, [dirty]) {
+// 		if (bar_slot) {
+// 			if (bar_slot.p && dirty & /*$$scope*/ 1) {
+// 				update_slot$(bar_slot_or_fallback$, bar_slot_template$, ctx, /*$$scope*/ ctx[0], dirty, get_bar_slot_changes$, get_bar_slot_context$);
+// 			}
+// 		}
+// 	},
+// }
