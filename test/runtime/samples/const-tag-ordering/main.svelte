@@ -6,6 +6,6 @@
 	<div>{n} ^ 4 = {hypercubed}</div>
 
 	{@const squared = n * n}
-  {@const cubed = squared * n}
-  {@const hypercubed = cubed * n}
+	{@const cubed = squared * n}
+	{@const hypercubed = cubed * n}
 {/each}
