@@ -17,6 +17,6 @@ export default {
 
 		assert.htmlEqual(target.innerHTML, `
 			<p style="color: green; transform: translateX(100%); border: 20px solid yellow;"></p>
-		`)
+		`);
 	}
 };
