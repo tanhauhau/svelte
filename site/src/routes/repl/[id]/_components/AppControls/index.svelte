@@ -15,7 +15,7 @@
 	export let gist;
 	export let name;
 	export let zen_mode;
-	export let modified;
+	export let modified_count;
 
 	let saving = false;
 	let downloading = false;
@@ -64,7 +64,7 @@
 			const gist = await r.json();
 			dispatch('forked', { gist });
 
-			modified = false
+			modified_count = 0;
 			repl.markSaved()
 
 			if (intentWasSave) {
@@ -124,7 +124,7 @@
 
 			await r.json();
 
-			modified = false
+			modified_count = 0;
 			repl.markSaved()
 			justSaved = true;
 			await wait(600);
@@ -210,8 +210,8 @@ export default app;` });
 				<Icon name="check" />
 			{:else}
 				<Icon name="save" />
-				{#if modified}
-					<div class="badge">{modified}</div>
+				{#if modified_count}
+					<div class="badge">{modified_count}</div>
 				{/if}
 			{/if}
 		</button>

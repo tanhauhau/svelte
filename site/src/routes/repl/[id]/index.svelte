@@ -29,7 +29,7 @@
 	let is_relaxed_gist = false;
 	let width = browser ? window.innerWidth : 1000;
 	let checked = false;
-	let modified = 0;
+	let modified_count = 0;
 
 	function update_query_string(version) {
 		const params = [];
@@ -105,7 +105,7 @@
 	}
 
 	function handle_change(event) {
-		modified = event.detail.components.filter(c => c.modified).length
+		modified_count = event.detail.components.filter(c => c.modified).length;
 	}
 
 	$: svelteUrl = browser && version === 'local' ?
@@ -194,7 +194,7 @@
 		{repl}
 		bind:name
 		bind:zen_mode
-		bind:modified
+		bind:modified_count
 		on:forked={handle_fork}
 	/>
 
