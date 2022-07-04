@@ -19,6 +19,7 @@ export default class ConstTag extends Node {
 	contexts: Context[] = [];
 	node: ConstTagType;
 	scope: TemplateScope;
+	context_rest_properties: Map<string, Node> = new Map();
 
 	assignees: Set<string> = new Set();
   dependencies: Set<string> = new Set();
@@ -58,7 +59,8 @@ export default class ConstTag extends Node {
 			contexts: this.contexts,
 			node: this.node.expression.left,
 			scope: this.scope,
-			component: this.component
+			component: this.component,
+			context_rest_properties: this.context_rest_properties
 		});
 		this.expression = new Expression(this.component, this, this.scope, this.node.expression.right);
 		this.contexts.forEach(context => {
